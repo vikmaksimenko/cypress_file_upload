@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<input type="file" id="file">
+	<input type="button" id="trigger" value="Load File">
+	<input type="button" id="trigger" value="Trigger Change">
+	<script>
+		var element = document.getElementById("#file");
+		function addListener(element, eventName, handler) {
+		  if (element.addEventListener) {
+		    element.addEventListener(eventName, handler, false);
+		  }
+		  else if (element.attachEvent) {
+		    element.attachEvent('on' + eventName, handler);
+		  }
+		  else {
+		    element['on' + eventName] = handler;
+		  }
+		}
+
+		addListener(document.getElementById('file'), 'change', function() {
+			console.log(this.files[0] instanceof File);
+		});
+
+
+		addListener(document.getElementById('trigger'), 'click', function() {
+			var file = new File(['content'], 'sample1.txt', {type: "text/txt"});
+        	var dataTransfer = new DataTransfer();
+        	dataTransfer.items.add(file);
+
+        	var fileInput = document.getElementById("file");
+        	fileInput.files = dataTransfer.files;
+        	console.log(fileInput.files[0] instanceof File);
+    	});
+	</script>
+</body>
+</html>
